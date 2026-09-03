@@ -150,14 +150,15 @@ direct read before Phases 9/11 are implemented in a follow-up session.
 
 ## Phase 0 — Infra
 
-Status: Complete (core scaffolding); dependency install run in background,
-gate commands to be verified before commit.
+Status: ✅ Complete. All three quality gates pass against the full tree.
 
 Files written:
-- `package.json` (Expo SDK 52 pin, expo-router entry, full dependency list
-  per component-library/screen-specs skills: flash-list, victory-native,
+- `package.json` (Expo SDK 52 pin — `expo: ~52.0.0`, `react-native: 0.76.5`,
+  `react: 18.3.1` — expo-router entry, full dependency list per
+  component-library/screen-specs skills: flash-list, victory-native,
   reanimated, gesture-handler, qrcode-svg, vector-icons, async-storage,
-  secure-store, crypto)
+  secure-store, crypto, @expo-google-fonts/space-grotesk +
+  @expo-google-fonts/ibm-plex-sans)
 - `app.json` (expo-router plugin, scheme `fbtrader`, new architecture on,
   bundle id `rw.foodbundles.trader`)
 - `tsconfig.json` (strict, `noUncheckedIndexedAccess`, `@/*` → `src/*` alias)
@@ -166,34 +167,76 @@ Files written:
   error, `no-console` error except warn/error, `TSAnyKeyword` restricted)
 - `scripts/check-line-limit.ts` (200-line cap enforcement over app/, src/,
   scripts/)
-- `expo-env.d.ts`
-- `.gitignore`, `assets/*` (icons) — carried over from scaffold
+- `expo-env.d.ts`, `.gitignore`, `assets/*` (icons)
+
+Note: `npm install` initially failed mid-run with an `ENOENT spawn cmd.exe`
+transient error that left `node_modules` partially populated (missing
+`.bin/tsc`, missing `eslint-config-expo`'s transitive plugins). Repaired by
+re-running `npm install` after `npm cache verify`, then explicitly adding
+`eslint-plugin-import`, `eslint-plugin-expo`, `eslint-plugin-react`,
+`eslint-plugin-react-hooks`, `eslint-import-resolver-typescript` as direct
+devDependencies since they were not being pulled in transitively as
+expected. One ESLint auto-fix applied: `Array<T>` → `T[]` in
+`check-line-limit.ts` (`@typescript-eslint/array-type`).
 
 Decisions: see Decisions #1, #5, #6 above.
 
 ## Phase 1 — Design system
 
-Status: Not started this session (see Deferred).
+Status: ✅ Complete. All three quality gates pass.
+
+Files written:
+- `src/theme/tokens.ts` — COLORS, COLORS_DARK, FONTS, TYPE_SCALE, SPACE,
+  RADIUS, SHADOW, DURATION, MIN_TAP_TARGET, MONO_FONT_IOS/ANDROID — copied
+  verbatim from design-system SKILL.
+- `src/theme/badges.ts` — LOAN_STATUS_BADGE, VOUCHER_STATUS_BADGE,
+  DELEGATION_STATUS_BADGE, VOUCHER_TYPE_CHIP, ORDER_STATUS_BADGE (extra —
+  not in SKILL but required by domain rules' 6-step order status),
+  PENALTY_STATUS_BADGE (extra — required by 3-state penalty status).
+- `src/theme/ThemeContext.tsx` — `ThemeProvider` + `useTheme()`, resolves
+  light/dark via `useColorScheme()`.
+- `src/i18n/en.ts`, `rw.ts`, `fr.ts` — full key set from accessibility-i18n
+  SKILL plus auth/notifications keys needed for later phases.
+- `src/i18n/index.tsx` — `LanguageProvider` + `useLanguage()` + `useI18n()`,
+  persists to AsyncStorage key `traderLanguage`, defaults to English.
+- `src/types/domain.ts` + `src/types/domain-extra.ts` — enums and interfaces
+  mirrored from `trader-app/lib/types.ts` + `traderService.ts`, split across
+  two files to respect the 200-line cap. All `any` fields from the web
+  source replaced with precise types.
+- `src/lib/currency.ts` — `formatRwf()`, `formatAmount()`.
+- `src/lib/date.ts` — `formatDate()`, `formatDateTime()`, `formatRelative()`,
+  language-aware (EN/FR/RW month names) per accessibility-i18n SKILL.
+- `src/stores/authStore.ts` — minimal `useSyncExternalStore`-based auth
+  store (no external state library — kept inspectable), holds
+  `TraderUser | null` + `agreementAccepted`.
+- `app/_layout.tsx` — root layout: loads SpaceGrotesk + IBMPlexSans via
+  `useFonts`, wraps in `GestureHandlerRootView` > `SafeAreaProvider` >
+  `ThemeProvider` > `LanguageProvider` > `Stack`, holds splash screen until
+  fonts ready.
+
+Decisions taken autonomously:
+- Added `ORDER_STATUS_BADGE` and `PENALTY_STATUS_BADGE` maps beyond what
+  design-system SKILL lists verbatim, since CLAUDE.md's domain rules
+  require distinct badges for the 8-state order status and 3-state penalty
+  status, and component-library SKILL explicitly forbids reusing
+  `OrderStatusBadge` for non-order statuses (implying it must exist).
+- `authStore` deliberately does not persist across app restarts (no
+  AsyncStorage) since auth is fully mocked/demo — session lives in memory
+  only, reset on reload. Conservative: avoids implying a real auth system.
 
 ## Phases 2–13
 
-Status: Not started this session (see Deferred).
+Status: Not started (see Deferred).
 
 ---
 
 ## Deferred
 
-Everything after Phase 0 infra scaffolding is **deferred to a follow-up
-session** due to the realistic scope of this task versus a single agent
-turn's context budget. Specifically NOT built this session:
-
-- Phase 1 — Design system (`src/theme/tokens.ts`, `src/theme/badges.ts`,
-  ThemeContext, font loading, i18n scaffold `src/i18n/{en,rw,fr}.ts`)
 - Phase 2 — Component library (all `src/components/**`)
 - Phase 3 — Navigation shell (Expo Router tree under `app/`, tab bar,
   TraderShell, guards)
 - Phase 4 — Mock data (`src/mocks/*.ts`, 8 files)
-- Phase 5 — Auth (login, forgot-password, authStore)
+- Phase 5 — Auth (login, forgot-password screens; store already scaffolded)
 - Phase 6 — Agreement screen
 - Phase 7 — Dashboard
 - Phase 8 — Loans
@@ -203,29 +246,16 @@ turn's context budget. Specifically NOT built this session:
 - Phase 12 — Notifications
 - Phase 13 — QA pass
 
-Reason: single-turn context budget for a subagent invocation cannot safely
-cover full, verified implementation of ~20 screens + full component library
-+ mock data + i18n (3 languages) + a11y audit in addition to the required
-upfront reading of 31 source files. Producing that volume of code without
-verification (tsc/eslint/line-limit passes, cross-reference checks on mock
-data) would violate the "real working code, not stubs" instruction more
-than stopping honestly after a solid, verified foundation.
+## Next steps
 
-Quality gates status at end of session: to be run and recorded once npm
-install completes (see below) — will attempt `tsc --noEmit`, `eslint`,
-`check-line-limit` against the Phase-0-only file set (no `src/` or `app/`
-route files exist yet to check, so early gate runs will be near-trivial;
-real signal starts at Phase 1).
-
-## Next steps for a follow-up session
-
-1. Confirm `npm install` completed cleanly; run `npx expo install --check`
-   to reconcile any peer-version mismatches against Decision #5.
-   Then proceed with Phase 1 exactly as scoped in CLAUDE.md/skills.
+1. Continue phase-by-phase exactly per the master plan in CLAUDE.md,
+   committing locally to `feat/trader-ui` after each phase's gates pass (or
+   logging Deferred with exact error text per the 3-fix-attempt rule).
 2. Read the three unread web components before their phases:
    `WithdrawRequests.tsx` (before Phase 7 dashboard / Phase 11 settings),
    `authenticator-management.tsx` (before Phase 11), `DelegationHistory.tsx`
    (before Phase 11).
-3. Continue phase-by-phase exactly per the master plan, committing locally
-   to `feat/trader-ui` after each phase's gates pass (or logging Deferred
-   with exact error text per the 3-fix-attempt rule).
+3. Phase 2 component library should start with `src/components/ui/` core
+   primitives (Button, Card, Badge wrapper components per-status, Input,
+   AmountInput) since navigation shell (Phase 3) and every later screen
+   depend on them.

@@ -4,6 +4,14 @@
  * Source: `.claude/skills/design-system/SKILL.md`.
  */
 import { COLORS } from "./tokens";
+import type {
+  LoanStatus,
+  VoucherStatus,
+  VoucherType,
+  OrderStatus,
+  PenaltyStatus,
+  DelegationStatusValue,
+} from "../types/domain";
 
 export interface BadgeTone {
   bg: string;
@@ -11,7 +19,7 @@ export interface BadgeTone {
   border?: string;
 }
 
-export const LOAN_STATUS_BADGE: Record<string, BadgeTone> = {
+export const LOAN_STATUS_BADGE: Record<LoanStatus, BadgeTone> = {
   PENDING: { bg: "#FFF4E0", text: COLORS.marigold },
   APPROVED: { bg: "#E6F7ED", text: COLORS.ripe },
   ACCEPTED: { bg: COLORS.leaf, text: COLORS.paper },
@@ -20,7 +28,7 @@ export const LOAN_STATUS_BADGE: Record<string, BadgeTone> = {
   SETTLED: { bg: COLORS.hairline, text: COLORS.label },
 };
 
-export const VOUCHER_STATUS_BADGE: Record<string, BadgeTone> = {
+export const VOUCHER_STATUS_BADGE: Record<VoucherStatus, BadgeTone> = {
   ACTIVE: { bg: "#E6F7ED", text: COLORS.ripe },
   USED: { bg: COLORS.hairline, text: COLORS.label },
   EXPIRED: { bg: "#FDEAEA", text: COLORS.chili, border: COLORS.chili },
@@ -29,14 +37,14 @@ export const VOUCHER_STATUS_BADGE: Record<string, BadgeTone> = {
   SETTLED: { bg: COLORS.hairline, text: COLORS.label },
 };
 
-export const DELEGATION_STATUS_BADGE: Record<string, BadgeTone> = {
+export const DELEGATION_STATUS_BADGE: Record<DelegationStatusValue, BadgeTone> = {
   NOT_REQUESTED: { bg: COLORS.hairline, text: COLORS.label },
   PENDING: { bg: "#FFF4E0", text: COLORS.marigold },
   APPROVED: { bg: "#E6F7ED", text: COLORS.ripe },
   ACCEPTED: { bg: COLORS.leaf, text: COLORS.paper },
 };
 
-export const VOUCHER_TYPE_CHIP: Record<string, BadgeTone> = {
+export const VOUCHER_TYPE_CHIP: Record<VoucherType, BadgeTone> = {
   DISCOUNT_10: { bg: COLORS.oat, text: COLORS.leaf },
   DISCOUNT_20: { bg: COLORS.oat, text: COLORS.leaf },
   DISCOUNT_50: { bg: "#E4F1EA", text: COLORS.pine },
@@ -45,7 +53,7 @@ export const VOUCHER_TYPE_CHIP: Record<string, BadgeTone> = {
 };
 
 /** Order status uses its own dedicated map — never reuse for other kinds. */
-export const ORDER_STATUS_BADGE: Record<string, BadgeTone> = {
+export const ORDER_STATUS_BADGE: Record<OrderStatus, BadgeTone> = {
   PENDING: { bg: "#FFF4E0", text: COLORS.marigold },
   CONFIRMED: { bg: "#E6F7ED", text: COLORS.ripe },
   PREPARING: { bg: "#FFF4E0", text: COLORS.marigold },
@@ -56,7 +64,7 @@ export const ORDER_STATUS_BADGE: Record<string, BadgeTone> = {
   REFUNDED: { bg: COLORS.hairline, text: COLORS.label },
 };
 
-export const PENALTY_STATUS_BADGE: Record<string, BadgeTone> = {
+export const PENALTY_STATUS_BADGE: Record<PenaltyStatus, BadgeTone> = {
   PENDING: { bg: "#FFF4E0", text: COLORS.marigold },
   PAID: { bg: "#E6F7ED", text: COLORS.ripe },
   WAIVED: { bg: COLORS.hairline, text: COLORS.label },
