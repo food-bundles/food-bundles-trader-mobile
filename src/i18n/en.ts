@@ -1,96 +1,11 @@
 /**
- * English translations — source of truth for translation keys.
- * Every user-visible chrome string must have a key here.
+ * English translations — source of truth for translation keys. Merges
+ * `en-core.ts` (chrome/nav/statuses) and `en-screens.ts` (screen-specific
+ * copy), split to respect the 200-line file cap.
  */
-export const en = {
-  "nav.dashboard": "Dashboard",
-  "nav.loans": "Loans",
-  "nav.vouchers": "Vouchers",
-  "nav.orders": "Orders",
-  "nav.settings": "Settings",
+import { enCore } from "./en-core";
+import { enScreens } from "./en-screens";
 
-  "status.pending": "Pending",
-  "status.approved": "Approved",
-  "status.accepted": "Accepted",
-  "status.disbursed": "Disbursed",
-  "status.rejected": "Rejected",
-  "status.settled": "Settled",
-
-  "vStatus.active": "Active",
-  "vStatus.used": "Used",
-  "vStatus.expired": "Expired",
-  "vStatus.matured": "Matured",
-  "vStatus.suspended": "Suspended",
-  "vStatus.settled": "Settled",
-
-  "oStatus.pending": "Pending",
-  "oStatus.confirmed": "Confirmed",
-  "oStatus.preparing": "Preparing",
-  "oStatus.ready": "Ready",
-  "oStatus.inTransit": "In Transit",
-  "oStatus.delivered": "Delivered",
-  "oStatus.cancelled": "Cancelled",
-  "oStatus.refunded": "Refunded",
-
-  "delegation.status": "Delegation Status",
-  "delegation.notRequested": "Not requested",
-  "delegation.pending": "Pending approval",
-  "delegation.approved": "Approved — accept now",
-  "delegation.accepted": "Active — FB trading on your behalf",
-  "delegation.request": "Request Delegation",
-  "delegation.accept": "Accept Delegation",
-  "delegation.reverse": "Reverse Delegation",
-  "delegation.cancelRequest": "Cancel request",
-  "delegation.awaitingApproval": "Awaiting Food Bundles approval",
-  "delegation.explainer":
-    "Food Bundles will approve loans on your behalf while you earn commission",
-  "delegation.bannerPending": "Delegation approval pending from Food Bundles",
-  "delegation.bannerAccepted": "Food Bundles is approving loans on your behalf",
-
-  "commission.mode": "Commission Mode",
-  "commission.normal": "Standard (margin on voucher use)",
-  "commission.fixed": "Fixed ROI on deposited capital",
-  "commission.rate": "Commission Rate",
-  "commission.earned": "Earned this month",
-  "commission.pending": "Pending payout",
-  "commission.switchToFixed": "Switch to FIXED",
-  "commission.switchToNormal": "Switch to NORMAL",
-
-  "wallet.balance": "Wallet Balance",
-  "wallet.available": "Available",
-  "wallet.pending": "Pending Approved",
-  "wallet.topUp": "Top Up",
-  "wallet.withdraw": "Withdraw",
-
-  "common.loading": "Loading...",
-  "common.error": "Something went wrong",
-  "common.retry": "Try again",
-  "common.save": "Save",
-  "common.cancel": "Cancel",
-  "common.confirm": "Confirm",
-  "common.back": "Back",
-  "common.viewAll": "View all",
-  "common.approve": "Approve",
-  "common.reject": "Reject",
-  "common.next": "Next",
-  "common.submit": "Submit",
-
-  "agreement.title": "Digital Food Store Owner Agreement",
-  "agreement.accept": "Accept & Continue",
-  "agreement.checkbox": "I have read and agree to the terms",
-
-  "auth.login": "Sign in",
-  "auth.identifier": "Email / TIN / Phone",
-  "auth.password": "Password",
-  "auth.rememberMe": "Remember me",
-  "auth.forgotPassword": "Forgot password?",
-  "auth.wrongRole": "This account is not a Trader account",
-  "auth.sendResetLink": "Send Reset Link",
-  "auth.resetSent": "Check your email for the password reset link.",
-
-  "notifications.title": "Notifications",
-  "notifications.markAllRead": "Mark all read",
-  "notifications.empty": "No notifications yet",
-} as const;
+export const en = { ...enCore, ...enScreens } as const;
 
 export type TranslationKey = keyof typeof en;

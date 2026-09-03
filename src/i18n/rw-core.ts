@@ -1,0 +1,97 @@
+/**
+ * Kinyarwanda translations — core chrome. Keys must match `en-core.ts`.
+ */
+import type { TranslationKey } from "./en";
+import type { enCore } from "./en-core";
+
+export const rwCore: Record<keyof typeof enCore, string> = {
+  "nav.dashboard": "Aho Ukora",
+  "nav.loans": "Inguzanyo",
+  "nav.vouchers": "Tikite",
+  "nav.orders": "Amabisuriro",
+  "nav.settings": "Igenamiterere",
+
+  "status.pending": "Irategerezwa",
+  "status.approved": "Yemejwe",
+  "status.accepted": "Yemewe",
+  "status.disbursed": "Yatanzwe",
+  "status.rejected": "Yanzwe",
+  "status.settled": "Yarangiye",
+
+  "vStatus.active": "Ikora",
+  "vStatus.used": "Yakoreshejwe",
+  "vStatus.expired": "Yarashize",
+  "vStatus.matured": "Yageze igihe",
+  "vStatus.suspended": "Yahagaritswe",
+  "vStatus.settled": "Yarangiye",
+
+  "oStatus.pending": "Irategerezwa",
+  "oStatus.confirmed": "Yemejwe",
+  "oStatus.preparing": "Iri gutegurwa",
+  "oStatus.ready": "Iteguye",
+  "oStatus.inTransit": "Iri mu nzira",
+  "oStatus.delivered": "Yagejejwe",
+  "oStatus.cancelled": "Yahagaritswe",
+  "oStatus.refunded": "Yasubijwe",
+
+  "delegation.status": "Uko Ubuhagarariro Buhagaze",
+  "delegation.notRequested": "Ntibyasabwe",
+  "delegation.pending": "Bitegereje kwemezwa",
+  "delegation.approved": "Byemejwe — emeza nonaha",
+  "delegation.accepted": "Bikora — FB irakugurira",
+  "delegation.request": "Saba Ubuhagarariro",
+  "delegation.accept": "Emeza Ubuhagarariro",
+  "delegation.reverse": "Kuraho Ubuhagarariro",
+  "delegation.cancelRequest": "Hagarika icyifuzo",
+  "delegation.awaitingApproval": "Bitegereje kwemezwa na Food Bundles",
+  "delegation.explainer":
+    "Food Bundles izemeza inguzanyo mu izina ryawe mu gihe wowe uzabona amafaranga",
+  "delegation.bannerPending": "Kwemeza ubuhagarariro biracyategerejwe na Food Bundles",
+  "delegation.bannerAccepted": "Food Bundles irimo kwemeza inguzanyo mu izina ryawe",
+
+  "commission.mode": "Uburyo bwo Kubona Amafaranga",
+  "commission.normal": "Bisanzwe (umugabane ku tikite zikoreshejwe)",
+  "commission.fixed": "Umubare uhoraho ku mafaranga washyizeho",
+  "commission.rate": "Igipimo cy'Amafaranga",
+  "commission.earned": "Wabonye uku kwezi",
+  "commission.pending": "Bitegereje kwishyurwa",
+  "commission.switchToFixed": "Hindukira ku Buryo buhoraho",
+  "commission.switchToNormal": "Hindukira ku Buryo Busanzwe",
+
+  "wallet.balance": "Amafaranga afite konti",
+  "wallet.available": "Ahari",
+  "wallet.pending": "Byemejwe Bitegereje",
+  "wallet.topUp": "Ongeramo Amafaranga",
+  "wallet.withdraw": "Kuramo Amafaranga",
+
+  "common.loading": "Birategerezwa...",
+  "common.error": "Habaye ikibazo",
+  "common.retry": "Gerageza ukundi",
+  "common.save": "Bika",
+  "common.cancel": "Hagarika",
+  "common.confirm": "Emeza",
+  "common.back": "Subira",
+  "common.viewAll": "Reba byose",
+  "common.approve": "Emeza",
+  "common.reject": "Anga",
+  "common.next": "Komeza",
+  "common.submit": "Ohereza",
+
+  "agreement.title": "Amasezerano y'Umucuruzi w'Ibiribwa",
+  "agreement.accept": "Emeza & Komeza",
+  "agreement.checkbox": "Nasomye kandi nemeye amabwiriza",
+
+  "auth.login": "Injira",
+  "auth.identifier": "Imeri / TIN / Telefoni",
+  "auth.password": "Ijambo ry'ibanga",
+  "auth.rememberMe": "Nyibuke",
+  "auth.forgotPassword": "Wibagiwe ijambo ry'ibanga?",
+  "auth.wrongRole": "Iyi konti si iy'Umucuruzi",
+  "auth.sendResetLink": "Ohereza Ihuza ryo Guhindura",
+  "auth.resetSent": "Reba imeri yawe uhabone ihuza ryo guhindura ijambo ry'ibanga.",
+
+  "notifications.title": "Ubutumwa",
+  "notifications.markAllRead": "Byose byasomwe",
+  "notifications.empty": "Nta butumwa buriho",
+  "notifications.unread": "butasomwe",
+} satisfies Partial<Record<TranslationKey, string>>;
