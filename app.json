@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "FoodBundles Trader",
+    "slug": "food-bundles-trader-mobile",
+    "version": "1.0.0",
+    "scheme": "fbtrader",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "plugins": ["expo-router"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "rw.foodbundles.trader"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F6F5F1",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "rw.foodbundles.trader"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    }
+  }
+}
