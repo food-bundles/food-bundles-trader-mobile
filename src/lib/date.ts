@@ -44,6 +44,13 @@ export function formatDateTime(iso: string, lang: Language = "en"): string {
   return `${datePart}, ${hh}:${mm}`;
 }
 
+/** True if the given ISO timestamp is less than `ms` away from now (future). */
+export function isWithinMs(iso: string, ms: number): boolean {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return false;
+  return d.getTime() - Date.now() < ms;
+}
+
 /** Returns a coarse relative-time string, e.g. "2h ago", "3d ago", "now". */
 export function formatRelative(iso: string): string {
   const d = new Date(iso);

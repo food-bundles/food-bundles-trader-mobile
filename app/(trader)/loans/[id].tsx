@@ -33,7 +33,7 @@ export default function LoanDetailScreen() {
   if (!loan) {
     return (
       <TraderShell title={t("loans.detail")} showBack onBack={() => router.back()}>
-        <ErrorState message="Loan not found" onRetry={() => router.back()} />
+        <ErrorState message={`${t("loans.detail")}: ${t("common.notFound")}`} onRetry={() => router.back()} />
       </TraderShell>
     );
   }
