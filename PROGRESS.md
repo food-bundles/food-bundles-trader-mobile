@@ -463,3 +463,171 @@ npx tsc --noEmit                    -> clean, zero errors
 npx eslint . --max-warnings 0       -> clean, zero warnings/errors
 npx tsx scripts/check-line-limit.ts -> OK: all 91 files within 200 lines
 ```
+
+---
+
+# Implementation complete
+
+All 14 phases (0 through 13) of the FoodBundles Trader mobile app are
+now done. This section is the single reference point for the whole
+build: final counts, every autonomous decision made across every phase,
+everything deferred and why, and the final git log.
+
+## Final file & screen counts
+
+- **91 total source files** under `app/`, `src/`, `scripts/` — every one
+  at or under the 200-line cap (verified by
+  `npx tsx scripts/check-line-limit.ts`).
+  - `app/` — 18 files (screens + layouts)
+  - `src/` — 72 files (components, stores, theme, i18n, lib, types, mocks)
+  - `scripts/` — 1 file (the line-limit gate itself)
+- **15 screens**, all with a working, mocked, navigable flow:
+  1. `app/(auth)/login.tsx`
+  2. `app/(auth)/forgot-password.tsx`
+  3. `app/agreement/index.tsx`
+  4. `app/(trader)/dashboard/index.tsx`
+  5. `app/(trader)/loans/index.tsx`
+  6. `app/(trader)/loans/[id].tsx`
+  7. `app/(trader)/vouchers/index.tsx`
+  8. `app/(trader)/vouchers/[id].tsx`
+  9. `app/(trader)/orders/index.tsx`
+  10. `app/(trader)/orders/[id].tsx`
+  11. `app/(trader)/settings/index.tsx`
+  12. `app/(trader)/settings/delegation.tsx`
+  13. `app/(trader)/settings/commission.tsx`
+  14. `app/(trader)/settings/delegation-history.tsx`
+  15. `app/(trader)/settings/authenticator.tsx`
+- Plus the always-on chrome: root `_layout.tsx`, `(trader)/_layout.tsx`
+  (tab bar + guards), `TraderShell`/`Header`/`BottomTabBar`,
+  `NotificationDrawer` (reachable from every screen via the header bell).
+
+## Every autonomous decision made across the whole build
+
+Compiled from git history (`aeae9f1` through `08a8160`) and every prior
+PROGRESS.md entry, in build order:
+
+**Phase 0 — Infra**
+1. Pinned Expo SDK to 52 (`expo: ~52.0.0`) against the scaffolding tool's
+   latest-by-default, because CLAUDE.md names SDK 52 explicitly as an
+   identity fact — spec over tool default.
+2. Repaired a transient `npm install` `ENOENT spawn cmd.exe` failure by
+   re-running after `npm cache verify` and adding four ESLint plugins as
+   direct devDependencies that weren't resolving transitively as expected.
+3. Added a `no-restricted-syntax` rule for `TSAnyKeyword` in addition to
+   `@typescript-eslint/no-explicit-any`, since CLAUDE.md bans `any`,
+   `as any`, and `@ts-ignore` as three separate items — belt-and-braces.
+
+**Phase 1 — Design system**
+4. Added `ORDER_STATUS_BADGE` and `PENALTY_STATUS_BADGE` colour maps
+   beyond what the design-system SKILL lists verbatim, since the 8-state
+   order status and 3-state penalty status both need dedicated badges per
+   CLAUDE.md's domain rules and the component-library SKILL's "never
+   reuse OrderStatusBadge for non-order statuses" rule (implying each
+   status kind needs its own).
+5. `authStore` deliberately does not persist across app restarts (no
+   AsyncStorage) — auth is fully mocked/demo, so persisting a fake session
+   would misleadingly imply a real auth system.
+
+**Phases 2–10 — Component library, navigation, mocks, auth, agreement,
+dashboard, loans, vouchers, orders**
+6. The real web `ApproveLoanModal.tsx` is a simple confirm dialog with
+   fixed fields (`voucherType: "DISCOUNT_100"`, notes empty); the
+   component-library SKILL specifies a richer form (amount, voucher-type
+   selector, repayment slider, notes, commission preview). Resolution:
+   built the richer SKILL-specified UI (more complete, more accessible,
+   doesn't contradict the web app's business rule since DISCOUNT_100 is
+   preselected) but defaults its submit behaviour to match the web app's
+   fixed values if the trader changes nothing.
+7. `CommissionSettings`'s web flow has no OTP step (confirm dialog only);
+   the screen-specs SKILL specifies "ConfirmDialog → OTP → success".
+   Resolution: implemented the OTP step as the SKILL describes (stricter
+   security, doesn't remove any web capability) while keeping the confirm
+   dialog's copy verbatim from the web component.
+8. No git remote configured — committed locally to `feat/trader-ui` every
+   phase; `git push` skipped and logged every time, per this task's
+   explicit instruction that there is no remote.
+9. Exact Expo-52-compatible dependency patch versions were hand-picked
+   from the published SDK 52 compatibility matrix, with `npx expo
+   install --check`'s own resolution taking precedence wherever it
+   differed (trust the platform's resolver over a manual guess).
+
+**Phase 11 — Settings** (this session)
+10. **Known web-source bug avoided by construction**: web
+    `app/settings/manage/page.tsx` line 79 does
+    `wallet?.commissionMode.toLowerCase()` — `?.` guards `wallet` but not
+    `commissionMode`, so it crashes whenever `wallet` exists but
+    `commissionMode` is `undefined`. Mobile's `TraderWallet.commissionMode`
+    is a required field in the type system and `MOCK_WALLET.commissionMode`
+    is always `"NORMAL"`, so that undefined state cannot occur; every read
+    site additionally uses full-chain optional chaining as defense in depth.
+11. Added `delegationStore.ts` and `commissionStore.ts` (in-memory,
+    `useSyncExternalStore`-based) to represent the request/accept/reverse
+    and mode-toggle *actions* CLAUDE.md's mock-data rules don't otherwise
+    cover — built by copying the exact precedent already established by
+    `authStore`/`notificationStore`, not a new pattern, so Settings and
+    Dashboard share one consistent live state within a session.
+12. 2FA secret "copy" is a local-state toggle (not a real clipboard
+    write) because `expo-clipboard` isn't an installed dependency and
+    adding one mid-build risks a native-rebuild issue for a cosmetic
+    affordance. Logged under Deferred rather than silently downgraded.
+13. QR code renders a real, working QR (via the already-installed
+    `react-native-qrcode-svg`, encoding a real `otpauth://` URI from the
+    mocked secret) rather than a static placeholder graphic — more
+    correct, and required no new dependency.
+14. Delegation history renders as a single newest-first list rather than
+    fabricating pagination UI (page numbers, "load more") for a mock
+    dataset of ~8 events — avoids implying more data exists than the mock
+    provides.
+15. Left `DomainBadges.tsx`'s raw-enum-string labels (not routed through
+    `t()`) unchanged rather than doing an unscoped refactor of an
+    already-shipped, passing, widely-used component mid-phase; flagged
+    for the QA pass (see Phase 13 Deferred) instead.
+
+**Phase 13 — QA pass** (this session)
+16. Fixed three list screens (loans/vouchers/orders) found missing
+    loading and/or error states, and three hardcoded-hex/one hardcoded
+    currency-string leaks found by grep sweep (see the Phase 13 section
+    above for full detail) — all fixed immediately since they were clear,
+    unambiguous non-negotiable violations, not judgment calls.
+17. Chose NOT to refactor 163 pre-existing inline `fontSize: <number>`
+    occurrences across the whole app to spread `TYPE_SCALE` entries
+    instead, since every value already matches the canonical scale
+    (visually/numerically compliant, only structurally non-DRY) and a
+    163-site blind refactor carries disproportionate regression risk for
+    a stylistic gap — most conservative option: leave working, correct
+    UI alone; log the gap precisely instead of guessing at a large rewrite.
+18. Chose NOT to refactor `DomainBadges.tsx` to route labels through
+    `t()` for the same reason — pre-existing, widely used, higher-risk
+    change than this pass's grep-driven remit; logged instead.
+
+## Deferred (final list, whole project)
+
+- **`expo-clipboard` not installed** — 2FA "copy secret" is a local-state
+  confirmation, not a real clipboard write (Phase 11, decision 12).
+- **163 hardcoded-but-scale-matching `fontSize` literals** across
+  pre-existing files instead of `TYPE_SCALE` object spreads (Phase 13,
+  decision 17). Not a visual or functional bug — a structural DRY gap.
+- **`DomainBadges.tsx` status labels bypass `t()`** — renders raw enum
+  strings instead of the already-defined `status.*`/`vStatus.*`/
+  `delegation.*` translation keys (Phase 13, decision 18). Real i18n gap
+  on a shipped, widely-used component; needs a scoped follow-up (API
+  change or hook access) rather than a QA-pass-sized fix.
+- No unresolved gate failures exist — all three quality gates pass clean
+  on the final commit (`08a8160`).
+
+## Final git log
+
+```
+08a8160 fix(qa): add missing list-screen states and remove hardcoded design tokens
+888b739 feat(settings): build delegation, commission, history, and authenticator screens
+aa34c67 feat(vouchers,orders): Phase 9/10 voucher and order screens
+98bea5a feat(nav): Phase 3 navigation shell + Phase 5/6/7/8 auth, agreement, dashboard, loans
+38ad029 feat(nav): complete Phase 2 component library — layout, modals, notifications
+06cbac1 feat(mocks): Phase 4 mock data + Input/AmountInput/OTPInput/ConfirmDialog
+b15374b feat(theme): Phase 1 design system + start Phase 2 component library
+aeae9f1 feat(infra): scaffold Expo SDK 52 project with strict TS, lint, line-limit gate
+ae41cc8 chore: initial commit of governance docs and skills
+```
+
+No remote is configured; all commits are local to `feat/trader-ui` per
+this task's explicit instruction not to push.
