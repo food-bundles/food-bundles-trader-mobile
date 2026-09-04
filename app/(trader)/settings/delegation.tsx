@@ -25,7 +25,7 @@ import {
 
 /** Delegation settings screen: request/accept/reverse, OTP on accept. */
 export default function DelegationScreen() {
-  const { colors, space } = useTheme();
+  const { colors, space, surfaceTint, radius } = useTheme();
   const t = useI18n();
   const { status } = useDelegationStore();
   const [otpVisible, setOtpVisible] = useState(false);
@@ -65,8 +65,8 @@ export default function DelegationScreen() {
             <View style={{ gap: space.md }}>
               <View
                 style={{
-                  backgroundColor: "#FFF4E0",
-                  borderRadius: 8,
+                  backgroundColor: surfaceTint.warning,
+                  borderRadius: radius.sm,
                   padding: space.md,
                 }}
               >
@@ -100,7 +100,7 @@ export default function DelegationScreen() {
 
           {status.status === "ACCEPTED" ? (
             <View style={{ gap: space.md }}>
-              <View style={{ backgroundColor: colors.leaf, borderRadius: 8, padding: space.md }}>
+              <View style={{ backgroundColor: colors.leaf, borderRadius: radius.sm, padding: space.md }}>
                 <Text style={{ fontFamily: "IBMPlexSans_600", fontSize: 13, fontWeight: "600", color: colors.paper }}>
                   {t("delegation.accepted")}
                 </Text>

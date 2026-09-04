@@ -9,6 +9,7 @@ import { MIN_TAP_TARGET } from "../../theme/tokens";
 import { VoucherStatusBadge, VoucherTypeChip } from "../ui/DomainBadges";
 import { Card } from "../ui/Card";
 import { formatDate, isWithinMs } from "../../lib/date";
+import { formatRwf } from "../../lib/currency";
 import type { Voucher } from "../../types/domain";
 
 interface VoucherRowProps {
@@ -30,7 +31,7 @@ export function VoucherRow({ voucher, onPress }: VoucherRowProps) {
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`Voucher ${voucher.voucherCode}, ${voucher.status}, ${voucher.remainingCredit} RWF remaining`}
+      accessibilityLabel={`Voucher ${voucher.voucherCode}, ${voucher.status}, ${formatRwf(voucher.remainingCredit)} remaining`}
       style={{ minHeight: MIN_TAP_TARGET, marginBottom: space.md }}
     >
       <Card>

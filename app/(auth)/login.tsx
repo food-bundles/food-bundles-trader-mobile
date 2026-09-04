@@ -16,7 +16,7 @@ import { MOCK_TRADER, MOCK_NON_TRADER_EMAIL } from "../../src/mocks/auth";
 
 /** Trader sign-in screen: identifier + password, mocked authentication. */
 export default function LoginScreen() {
-  const { colors, space } = useTheme();
+  const { colors, space, surfaceTint, radius } = useTheme();
   const t = useI18n();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -58,8 +58,8 @@ export default function LoginScreen() {
         {error ? (
           <View
             style={{
-              backgroundColor: "#FDEAEA",
-              borderRadius: 8,
+              backgroundColor: surfaceTint.error,
+              borderRadius: radius.sm,
               padding: space.md,
               marginBottom: space.md,
             }}

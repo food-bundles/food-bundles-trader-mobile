@@ -2,13 +2,15 @@
  * Vouchers list: Approved (ACTIVE/USED/SETTLED/MATURED) vs Expired tabs,
  * search, tap-to-open VoucherDetailsSheet. Source: `app/vouchers/page.tsx`.
  */
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useTheme } from "../../../src/theme/ThemeContext";
 import { useI18n } from "../../../src/i18n";
 import { TraderShell } from "../../../src/components/layout/TraderShell";
 import { VoucherRow } from "../../../src/components/data/VoucherRow";
 import { EmptyState } from "../../../src/components/data/EmptyState";
+import { ErrorState } from "../../../src/components/data/ErrorState";
+import { SkeletonRow } from "../../../src/components/data/SkeletonRow";
 import { Input } from "../../../src/components/ui/Input";
 import { Button } from "../../../src/components/ui/Button";
 import { VoucherDetailsSheet } from "../../../src/components/modals/VoucherDetailsSheet";
@@ -24,6 +26,18 @@ export default function VouchersScreen() {
   const [tab, setTab] = useState<Tab>("approved");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Voucher | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isError] = useState(false);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 400);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = useMemo(() => {
     return MOCK_VOUCHERS.filter((v) => {
@@ -65,7 +79,15 @@ export default function VouchersScreen() {
           accessibilityLabel={t("vouchers.searchPlaceholder")}
         />
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <>
+            <SkeletonRow height={90} />
+            <SkeletonRow height={90} />
+            <SkeletonRow height={90} />
+          </>
+        ) : isError ? (
+          <ErrorState onRetry={load} />
+        ) : filtered.length === 0 ? (
           <EmptyState icon="ticket-outline" message={t("vouchers.empty")} />
         ) : (
           filtered.map((voucher) => (

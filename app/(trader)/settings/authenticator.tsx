@@ -23,7 +23,7 @@ type PageState = "idle" | "setup" | "enabled";
 
 /** 2FA setup/manage screen: QR + secret + verify, or active status + disable. */
 export default function AuthenticatorScreen() {
-  const { colors, space } = useTheme();
+  const { colors, space, radius } = useTheme();
   const t = useI18n();
   const [pageState, setPageState] = useState<PageState>(
     MOCK_TRADER?.twoFactorEnabled ? "enabled" : "idle"
@@ -87,7 +87,7 @@ export default function AuthenticatorScreen() {
               <QRCode value={otpUri} size={160} color={colors.ink} backgroundColor={colors.paper} />
             </View>
 
-            <View style={{ borderWidth: 1, borderColor: colors.hairline, borderRadius: 8, padding: space.sm, marginBottom: space.md }}>
+            <View style={{ borderWidth: 1, borderColor: colors.hairline, borderRadius: radius.sm, padding: space.sm, marginBottom: space.md }}>
               <Text style={{ fontFamily: "IBMPlexSans_600", fontSize: 10, fontWeight: "600", color: colors.label, textTransform: "uppercase", letterSpacing: 0.4 }}>
                 {t("twoFactor.manualKey")}
               </Text>

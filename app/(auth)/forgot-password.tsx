@@ -14,7 +14,7 @@ import { Header } from "../../src/components/layout/Header";
 
 /** Password-reset request screen: email + confirmation card. */
 export default function ForgotPasswordScreen() {
-  const { colors, space } = useTheme();
+  const { colors, space, surfaceTint, radius } = useTheme();
   const t = useI18n();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
@@ -24,7 +24,7 @@ export default function ForgotPasswordScreen() {
       <Header title={t("auth.forgotPassword")} showBack onBack={() => router.back()} />
       <ScrollView contentContainerStyle={{ padding: space.xl, gap: space.md }}>
         {sent ? (
-          <View style={{ backgroundColor: "#E6F7ED", borderRadius: 8, padding: space.lg }}>
+          <View style={{ backgroundColor: surfaceTint.success, borderRadius: radius.sm, padding: space.lg }}>
             <Text style={{ fontFamily: "IBMPlexSans", fontSize: 14, color: colors.ripe }}>
               {t("auth.resetSent")}
             </Text>

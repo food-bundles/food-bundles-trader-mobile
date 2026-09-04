@@ -34,6 +34,19 @@ export const COLORS_DARK = {
 
 export type ColorToken = keyof typeof COLORS;
 
+/**
+ * Tinted surface backgrounds paired with a semantic text/icon color —
+ * used for inline banners (error messages, success confirmations, pending
+ * notices) as an alternative to a solid `StatusBadge` pill. Same tint
+ * values already used by the badge colour maps in `badges.ts`; centralised
+ * here so screens never need to inline a raw hex for this pattern.
+ */
+export const SURFACE_TINT = {
+  success: "#E6F7ED",
+  error: "#FDEAEA",
+  warning: "#FFF4E0",
+} as const;
+
 export const FONTS = {
   heading: "SpaceGrotesk",
   body: "IBMPlexSans",

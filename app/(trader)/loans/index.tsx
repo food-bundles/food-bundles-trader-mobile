@@ -2,7 +2,7 @@
  * Loan applications list: stat cards, status filter chips, search, list
  * with loading/empty/error states. Source: `app/credit/page.tsx`.
  */
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { router } from "expo-router";
 import { useTheme } from "../../../src/theme/ThemeContext";
@@ -11,6 +11,7 @@ import { TraderShell } from "../../../src/components/layout/TraderShell";
 import { StatCard } from "../../../src/components/data/StatCard";
 import { LoanRow } from "../../../src/components/data/LoanRow";
 import { EmptyState } from "../../../src/components/data/EmptyState";
+import { ErrorState } from "../../../src/components/data/ErrorState";
 import { SkeletonRow } from "../../../src/components/data/SkeletonRow";
 import { Input } from "../../../src/components/ui/Input";
 import { Button } from "../../../src/components/ui/Button";
@@ -31,9 +32,20 @@ const FILTERS: (LoanStatus | "ALL")[] = [
 export default function LoansScreen() {
   const { space } = useTheme();
   const t = useI18n();
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isError] = useState(false);
   const [filter, setFilter] = useState<LoanStatus | "ALL">("ALL");
   const [query, setQuery] = useState("");
+
+  const load = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 400);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = useMemo(() => {
     return MOCK_LOANS.filter((l) => {
@@ -95,6 +107,8 @@ export default function LoansScreen() {
             <SkeletonRow height={110} />
             <SkeletonRow height={110} />
           </>
+        ) : isError ? (
+          <ErrorState onRetry={load} />
         ) : filtered.length === 0 ? (
           <EmptyState icon="document-text-outline" message={t("loans.empty")} />
         ) : (

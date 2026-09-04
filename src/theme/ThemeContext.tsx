@@ -4,7 +4,7 @@
  */
 import React, { createContext, useContext, useMemo } from "react";
 import { useColorScheme } from "react-native";
-import { COLORS, COLORS_DARK, ColorToken } from "./tokens";
+import { COLORS, COLORS_DARK, ColorToken, SURFACE_TINT } from "./tokens";
 import { SPACE, RADIUS, SHADOW, DURATION, TYPE_SCALE, FONTS } from "./tokens";
 
 export interface ThemeValue {
@@ -16,6 +16,7 @@ export interface ThemeValue {
   duration: typeof DURATION;
   type: typeof TYPE_SCALE;
   fonts: typeof FONTS;
+  surfaceTint: typeof SURFACE_TINT;
 }
 
 const ThemeContext = createContext<ThemeValue | null>(null);
@@ -35,6 +36,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       duration: DURATION,
       type: TYPE_SCALE,
       fonts: FONTS,
+      surfaceTint: SURFACE_TINT,
     }),
     [isDark]
   );
