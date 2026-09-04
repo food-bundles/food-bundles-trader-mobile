@@ -48,6 +48,15 @@ export const rwCore: Record<keyof typeof enCore, string> = {
     "Food Bundles izemeza inguzanyo mu izina ryawe mu gihe wowe uzabona amafaranga",
   "delegation.bannerPending": "Kwemeza ubuhagarariro biracyategerejwe na Food Bundles",
   "delegation.bannerAccepted": "Food Bundles irimo kwemeza inguzanyo mu izina ryawe",
+  "delegation.reverseTitle": "Kuraho Ubuhagarariro",
+  "delegation.reverseMessage":
+    "Uzasubiza ubushobozi bwawe maze wemeze inguzanyo wowe ubwawe. Food Bundles ntizongera gucuruza mu izina ryawe.",
+  "delegation.reverseHint": "Ibi bizahagarika amasezerano y'ubuhagarariro bwawe",
+  "delegation.acceptOtpSubtitle": "Injiza kode y'imibare 6 yoherejwe kuri telefoni yawe kugira wemeze ubuhagarariro",
+  "delegation.commissionNote": "Amafaranga: {pct}% ku bikorwa byahagarariwe",
+  "delegation.requestSuccess": "Icyifuzo cy'ubuhagarariro cyoherejwe neza",
+  "delegation.acceptSuccess": "Ubuhagarariro bwemejwe neza",
+  "delegation.reverseSuccess": "Ubuhagarariro bwavanyweho neza",
 
   "commission.mode": "Uburyo bwo Kubona Amafaranga",
   "commission.normal": "Bisanzwe (umugabane ku tikite zikoreshejwe)",
@@ -57,6 +66,13 @@ export const rwCore: Record<keyof typeof enCore, string> = {
   "commission.pending": "Bitegereje kwishyurwa",
   "commission.switchToFixed": "Hindukira ku Buryo buhoraho",
   "commission.switchToNormal": "Hindukira ku Buryo Busanzwe",
+  "commission.confirmTitle": "Hindura Uburyo bwo Kubona Amafaranga",
+  "commission.confirmToFixed":
+    "Guhindukira ku buryo buhoraho bisobanura ko uzabona umubare uhoraho ku mafaranga washyizeho buri kwezi, uko tikite zikoreshejwe kose.",
+  "commission.confirmToNormal":
+    "Guhindukira ku buryo busanzwe bisobanura ko uzabona umugabane gusa ku mafaranga ya tikite akoreshejwe n'amaresitora.",
+  "commission.negotiatedNote": "Byumvikanyweho na Food Bundles",
+  "commission.switchSuccess": "Uburyo bwo kubona amafaranga bwahinduwe neza",
 
   "wallet.balance": "Amafaranga afite konti",
   "wallet.available": "Ahari",

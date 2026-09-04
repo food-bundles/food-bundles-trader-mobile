@@ -23,7 +23,8 @@ import { formatRwf } from "../../../src/lib/currency";
 import { MOCK_WALLET, MOCK_TRANSACTIONS } from "../../../src/mocks/wallet";
 import { MOCK_VOUCHERS } from "../../../src/mocks/vouchers";
 import { MOCK_TRADER_STATS, MOCK_COMMISSION_MONTHS } from "../../../src/mocks/commission";
-import { MOCK_DELEGATION_STATUS } from "../../../src/mocks/delegation";
+import { useDelegationStore } from "../../../src/stores/delegationStore";
+import { useCommissionMode } from "../../../src/stores/commissionStore";
 import { MOCK_TRADER } from "../../../src/mocks/auth";
 
 /** Trader dashboard: wallet, stats, commission trend, recent activity. */
@@ -52,6 +53,8 @@ export default function DashboardScreen() {
     setTimeout(() => setRefreshing(false), 500);
   }
 
+  const { status: delegationStatus } = useDelegationStore();
+  const commissionMode = useCommissionMode();
   const activeVouchers = MOCK_VOUCHERS.filter((v) => v.status === "ACTIVE").length;
   const currentMonth = MOCK_COMMISSION_MONTHS[MOCK_COMMISSION_MONTHS.length - 1];
 
@@ -71,7 +74,7 @@ export default function DashboardScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.leaf} />}
         >
           <DelegationBanner
-            status={MOCK_DELEGATION_STATUS.status}
+            status={delegationStatus.status}
             onPress={() => router.push("/(trader)/settings/delegation")}
           />
 
@@ -101,7 +104,7 @@ export default function DashboardScreen() {
           </View>
 
           <CommissionCard
-            mode={MOCK_WALLET.commissionMode}
+            mode={commissionMode}
             rate={MOCK_WALLET.commission}
             earnedThisMonth={currentMonth?.earned ?? 0}
             months={MOCK_COMMISSION_MONTHS}

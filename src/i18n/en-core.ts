@@ -48,6 +48,15 @@ export const enCore = {
     "Food Bundles will approve loans on your behalf while you earn commission",
   "delegation.bannerPending": "Delegation approval pending from Food Bundles",
   "delegation.bannerAccepted": "Food Bundles is approving loans on your behalf",
+  "delegation.reverseTitle": "Reverse Delegation",
+  "delegation.reverseMessage":
+    "You will regain control and approve loans directly. Food Bundles will no longer trade on your behalf.",
+  "delegation.reverseHint": "This will reverse your delegation agreement",
+  "delegation.acceptOtpSubtitle": "Enter the 6-digit code sent to your registered phone to accept delegation",
+  "delegation.commissionNote": "Commission: {pct}% on delegated trades",
+  "delegation.requestSuccess": "Delegation request submitted successfully",
+  "delegation.acceptSuccess": "Delegation accepted successfully",
+  "delegation.reverseSuccess": "Delegation reversed successfully",
 
   "commission.mode": "Commission Mode",
   "commission.normal": "Standard (margin on voucher use)",
@@ -57,6 +66,13 @@ export const enCore = {
   "commission.pending": "Pending payout",
   "commission.switchToFixed": "Switch to FIXED",
   "commission.switchToNormal": "Switch to NORMAL",
+  "commission.confirmTitle": "Change Commission Mode",
+  "commission.confirmToFixed":
+    "Switching to FIXED mode means you earn a fixed ROI on your deposited principal every month, regardless of voucher usage.",
+  "commission.confirmToNormal":
+    "Switching to NORMAL mode means you earn a margin only on the voucher credit restaurants actually utilize.",
+  "commission.negotiatedNote": "Negotiated by Food Bundles",
+  "commission.switchSuccess": "Commission mode updated successfully",
 
   "wallet.balance": "Wallet Balance",
   "wallet.available": "Available",

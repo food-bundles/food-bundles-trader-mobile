@@ -47,6 +47,15 @@ export const frCore: Record<keyof typeof enCore, string> = {
     "Food Bundles approuvera les prêts en votre nom pendant que vous gagnez une commission",
   "delegation.bannerPending": "Approbation de délégation en attente de Food Bundles",
   "delegation.bannerAccepted": "Food Bundles approuve les prêts en votre nom",
+  "delegation.reverseTitle": "Annuler la délégation",
+  "delegation.reverseMessage":
+    "Vous reprendrez le contrôle et approuverez les prêts directement. Food Bundles ne négociera plus en votre nom.",
+  "delegation.reverseHint": "Ceci annulera votre accord de délégation",
+  "delegation.acceptOtpSubtitle": "Entrez le code à 6 chiffres envoyé à votre téléphone pour accepter la délégation",
+  "delegation.commissionNote": "Commission : {pct}% sur les échanges délégués",
+  "delegation.requestSuccess": "Demande de délégation soumise avec succès",
+  "delegation.acceptSuccess": "Délégation acceptée avec succès",
+  "delegation.reverseSuccess": "Délégation annulée avec succès",
 
   "commission.mode": "Mode de commission",
   "commission.normal": "Standard (marge sur bon utilisé)",
@@ -56,6 +65,13 @@ export const frCore: Record<keyof typeof enCore, string> = {
   "commission.pending": "Paiement en attente",
   "commission.switchToFixed": "Passer en FIXE",
   "commission.switchToNormal": "Passer en NORMAL",
+  "commission.confirmTitle": "Changer le mode de commission",
+  "commission.confirmToFixed":
+    "Passer en mode FIXE signifie que vous gagnez un ROI fixe sur votre capital déposé chaque mois, quelle que soit l'utilisation des bons.",
+  "commission.confirmToNormal":
+    "Passer en mode NORMAL signifie que vous gagnez une marge uniquement sur le crédit des bons réellement utilisé par les restaurants.",
+  "commission.negotiatedNote": "Négocié par Food Bundles",
+  "commission.switchSuccess": "Mode de commission mis à jour avec succès",
 
   "wallet.balance": "Solde du portefeuille",
   "wallet.available": "Disponible",
