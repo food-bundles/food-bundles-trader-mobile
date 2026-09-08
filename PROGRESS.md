@@ -631,3 +631,37 @@ ae41cc8 chore: initial commit of governance docs and skills
 
 No remote is configured; all commits are local to `feat/trader-ui` per
 this task's explicit instruction not to push.
+
+## Phase 14 — Runtime verification (post-completion)
+
+Status: ✅ Complete
+
+The three static gates (tsc/eslint/line-limit) had verified the code
+compiles and lints, but the app itself had never actually been booted.
+Ran `npx expo export --platform android` (a real Metro bundle build,
+not a static check) to exercise every module's require-time code path
+— providers, navigation config, all 91 files across all 15 screens.
+
+Files changed: `package.json`, `package-lock.json`
+
+Decisions taken autonomously:
+- First attempt failed with `Cannot find module 'ajv/dist/compile/codegen'`
+  — a real, reproducible dependency conflict baked into the existing
+  lockfile: `eslint@8`'s internal `ajv@6` usage vs. `expo-router`'s
+  `schema-utils` → `ajv-keywords`/`ajv-formats` requiring `ajv@^8`, not
+  something introduced by this build's own code. Confirmed reproducible
+  even after a full clean `node_modules`/lockfile reinstall, ruling out
+  install corruption.
+- A blanket `overrides: { "ajv": "^8.17.1" }` fixed Metro bundling but
+  broke `eslint` itself (`@eslint/eslintrc` needs the ajv@6 API shape
+  internally) — reverted immediately rather than trading one gate for
+  another.
+- Final fix: scoped `overrides` targeting only `ajv-keywords` and
+  `ajv-formats`'s own `ajv` resolution to `^8.17.1`, leaving eslint's
+  own `ajv@6` untouched. Verified all three gates pass AND a full
+  Android Metro bundle succeeds (1652 modules, 4.91 MB `.hbc`, zero
+  require-time errors) simultaneously.
+
+Deferred: none — this closes the "never actually run" gap noted
+implicitly by the original build; no code defects were found during
+bundling, only this pre-existing tooling version conflict.

@@ -55,5 +55,13 @@
     "tsx": "^4.19.2",
     "typescript": "~5.3.3"
   },
+  "overrides": {
+    "ajv-keywords": {
+      "ajv": "^8.17.1"
+    },
+    "ajv-formats": {
+      "ajv": "^8.17.1"
+    }
+  },
   "private": true
 }
